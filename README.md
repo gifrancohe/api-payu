@@ -1,2 +1,2 @@
 # api-payu
-Api for testing and generating tokens for credit cards
+Api for testing and generating tokens for PayU credit cards
