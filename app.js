@@ -33,10 +33,11 @@ app.get('/payments-api/4.0/service.payment', (req, res) => {
 });
 
 app.get('/payments-api/4.0/service.token', (req, res) => {
-  const { callback, _card } = req.query
+  const { callback, _card, timeout } = req.query
   const payerId = _card ? _card.payer_id : undefined
   const method = _card ? _card.method : undefined
   const token = tokens.generateUuid()
+  const time = timeout ? timeout : 60000
 
   const jsonResponse = `${callback}({
     "token": "${token}",
@@ -46,7 +47,9 @@ app.get('/payments-api/4.0/service.token', (req, res) => {
     "document": "null"
   })`;
 
-  res.send(jsonResponse);
+  setTimeout(() => {
+    res.send(jsonResponse)
+  }, time)
 });
 
 const PORT = process.env.PORT ?? 1234
