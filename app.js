@@ -33,23 +33,27 @@ app.get('/payments-api/4.0/service.payment', (req, res) => {
 });
 
 app.get('/payments-api/4.0/service.token', (req, res) => {
-  const { callback, _card, timeout } = req.query
+  const { callback, _card, maxTimeout, minTimeout } = req.query
   const payerId = _card ? _card.payer_id : undefined
   const method = _card ? _card.method : undefined
   const token = tokens.generateUuid()
-  const time = timeout ? timeout : 60000
+  maxTimeout = maxTimeout ? maxTimeout : 60000
+  minTimeout = minTimeout ? minTimeout : 0
+
+  const randomTimeout = Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout;
 
   const jsonResponse = `${callback}({
     "token": "${token}",
     "name": "APPROVED",
     "payer_id": "${payerId}",
     "method": "${method}",
-    "document": "null"
+    "document": "null",
+    "randomTimeout": "${randomTimeout}"
   })`;
 
   setTimeout(() => {
     res.send(jsonResponse)
-  }, time)
+  }, randomTimeout)
 });
 
 const PORT = process.env.PORT ?? 1234
