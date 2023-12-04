@@ -37,7 +37,7 @@ app.get('/payments-api/4.0/service.token', (req, res) => {
   const payerId = _card ? _card.payer_id : undefined
   const method = _card ? _card.method : undefined
   const token = tokens.generateUuid()
-  const maxTimeout = maxTime ? maxTime : 20000
+  const maxTimeout = maxTime ? maxTime : 30000
   const minTimeout = minTime ? minTime : 0
 
   const randomTimeout = Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout;
