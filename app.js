@@ -1,33 +1,40 @@
 const express = require('express')
+const cors = require('cors')
 const tokens = require('./utils/tokens')
 
 const app = express()
 app.disable('x-powered-by')
 app.use(express.json())
 
+let corsOptions = {
+  origin: ['http://localhost:3000'],
+}
+
+app.use(cors(corsOptions))
+
 app.get('/payments-api/4.0/service.payment', (req, res) => {
   const { callback } = req.query;
 
-  const jsonResponse = `${callback}([
-    {id:11, name:'MASTERCARD'},
-    {id:99, name:'TEST_CREDIT_CARD'},
-    {id:44, name:'VISA'},
-    {id:22, name:'DINERS'},
-    {id:12, name:'AMEX'},
-    {id:45, name:'VISA_DEBIT'},
-    {id:34, name:'OTHERS_CASH'},
-    {id:23, name:'CODENSA'},
-    {id:36, name:'BANK_REFERENCED'},
-    {id:25, name:'PSE'},
-    {id:37, name:'EFECTY'},
-    {id:26, name:'ACH_DEBIT'},
-    {id:27, name:'CASH_ON_DELIVERY'},
-    {id:733, name:'BNPL'},
-    {id:40, name:'CMR'},
-    {id:41, name:'MASTERPASS'},
-    {id:43, name:'MASTERCARD_DEBIT'},
-    {id:32, name:'LENDING_INSTALLMENTS'},
-  ])`;
+  const jsonResponse = `[
+  { "id": 11, "name": "MASTERCARD" },
+  { "id": 99, "name": "TEST_CREDIT_CARD" },
+  { "id": 44, "name": "VISA" },
+  { "id": 22, "name": "DINERS" },
+  { "id": 12, "name": "AMEX" },
+  { "id": 45, "name": "VISA_DEBIT" },
+  { "id": 34, "name": "OTHERS_CASH" },
+  { "id": 23, "name": "CODENSA" },
+  { "id": 36, "name": "BANK_REFERENCED" },
+  { "id": 25, "name": "PSE" },
+  { "id": 37, "name": "EFECTY" },
+  { "id": 26, "name": "ACH_DEBIT" },
+  { "id": 27, "name": "CASH_ON_DELIVERY" },
+  { "id": 733, "name": "BNPL" },
+  { "id": 40, "name": "CMR" },
+  { "id": 41, "name": "MASTERPASS" },
+  { "id": 43, "name": "MASTERCARD_DEBIT" },
+  { "id": 32, "name": "LENDING_INSTALLMENTS" }
+]`;
 
   res.send(jsonResponse);
 });
@@ -42,18 +49,19 @@ app.get('/payments-api/4.0/service.token', (req, res) => {
 
   const randomTimeout = Math.floor(Math.random() * (maxTimeout - minTimeout + 1)) + minTimeout;
 
-  const jsonResponse = `${callback}({
+  const jsonResponse = `{
     "token": "${token}",
     "name": "APPROVED",
     "payer_id": "${payerId}",
     "method": "${method}",
     "document": "null",
     "randomTimeout": "${randomTimeout}"
-  })`;
+  }`;
 
-  setTimeout(() => {
+  res.send(jsonResponse);
+  /*setTimeout(() => {
     res.send(jsonResponse)
-  }, randomTimeout)
+  }, randomTimeout)*/
 });
 
 const PORT = process.env.PORT ?? 1234
